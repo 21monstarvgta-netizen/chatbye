@@ -259,7 +259,7 @@ function goTo(screenId, renderFn) {
 async function renderLists() {
   showLoading(true);
   try {
-    lists = await api('GET', `/api/lists/${chatId}`);
+    lists = await api('GET', `/api/shopping/${chatId}`);
   } catch(e) { lists = []; }
   showLoading(false);
 
@@ -312,7 +312,7 @@ async function createList() {
   if (!name) return;
   const list_id = Date.now().toString(36);
   showLoading(true);
-  const lst = await api('POST', `/api/lists/${chatId}`, { list_id, name, creator: userName });
+  const lst = await api('POST', `/api/shopping/${chatId}`, { list_id, name, creator: userName });
   showLoading(false);
   lists.push(lst);
   closeNewList();
@@ -324,7 +324,7 @@ document.getElementById('new-list-name').addEventListener('keydown', e => { if(e
 
 async function deleteList(listId) {
   if (!confirm('Удалить список?')) return;
-  await api('DELETE', `/api/lists/${chatId}/${listId}`);
+  await api('DELETE', `/api/shopping/${chatId}/${listId}`);
   lists = lists.filter(l => l.list_id !== listId);
   renderLists();
 }
@@ -376,7 +376,7 @@ function renderDetail() {
 
 async function toggleBought(key) {
   showLoading(true);
-  currentList = await api('POST', `/api/lists/${chatId}/${currentList.list_id}/buy`, { key, buyer: userName });
+  currentList = await api('POST', `/api/shopping/${chatId}/${currentList.list_id}/buy`, { key, buyer: userName });
   showLoading(false);
   renderDetail();
   tg?.HapticFeedback?.impactOccurred('light');
@@ -384,21 +384,21 @@ async function toggleBought(key) {
 
 async function removeItem(key) {
   showLoading(true);
-  currentList = await api('DELETE', `/api/lists/${chatId}/${currentList.list_id}/item`, { key });
+  currentList = await api('DELETE', `/api/shopping/${chatId}/${currentList.list_id}/item`, { key });
   showLoading(false);
   renderDetail();
 }
 
 async function clearBought() {
   showLoading(true);
-  currentList = await api('POST', `/api/lists/${chatId}/${currentList.list_id}/clearbought`, {});
+  currentList = await api('POST', `/api/shopping/${chatId}/${currentList.list_id}/clearbought`, {});
   showLoading(false);
   renderDetail();
 }
 
 async function deleteCurrentList() {
   if (!confirm(`Удалить список «${currentList.name}»?`)) return;
-  await api('DELETE', `/api/lists/${chatId}/${currentList.list_id}`);
+  await api('DELETE', `/api/shopping/${chatId}/${currentList.list_id}`);
   lists = lists.filter(l => l.list_id !== currentList.list_id);
   currentList = null;
   renderLists();
@@ -443,7 +443,7 @@ function renderCatItems() {
 
 async function toggleChip(key, itemName, el) {
   const cat_id = currentCatId;
-  currentList = await api('POST', `/api/lists/${chatId}/${currentList.list_id}/toggle`, {
+  currentList = await api('POST', `/api/shopping/${chatId}/${currentList.list_id}/toggle`, {
     key, name: itemName, cat_id, added_by: userName
   });
   el.classList.toggle('selected', key in (currentList.items || {}));
@@ -456,7 +456,7 @@ async function addGlobalCustom() {
   const val = input.value.trim();
   if (!val) return;
   showLoading(true);
-  currentList = await api('POST', `/api/lists/${chatId}/${currentList.list_id}/custom`, { name: val, added_by: userName });
+  currentList = await api('POST', `/api/shopping/${chatId}/${currentList.list_id}/custom`, { name: val, added_by: userName });
   showLoading(false);
   input.value = '';
   renderCatsGrid();
