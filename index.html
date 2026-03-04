@@ -210,17 +210,9 @@ if (tg) { tg.ready(); tg.expand(); tg.setHeaderColor('#0a0a1a'); tg.setBackgroun
 
 const userName = tg?.initDataUnsafe?.user?.first_name || 'Пользователь';
 const chatId = tg?.initDataUnsafe?.chat?.id || tg?.initDataUnsafe?.user?.id || 'test';
-console.log('chatId:', chatId, 'userName:', userName);
-console.log('tg initData:', tg?.initDataUnsafe);
 
 // !! ЗАМЕНИ НА URL СВОЕГО API !!
 const API = 'https://chatverse-r3y1.onrender.com/api/shopping';
-```
-Нажми **Commit changes**.
-
-Потом проверь в браузере что это работает:
-```
-https://chatverse-r3y1.onrender.com/api/shopping/test
 
 const CATEGORIES = [
   { id:'dairy',   emoji:'🥛', name:'Молочная продукция',  items:['Молоко','Кефир','Ряженка','Йогурт','Сметана','Творог','Сыр','Масло сливочное','Сливки','Глазированные сырки','Сгущёнка'] },
@@ -320,9 +312,7 @@ async function createList() {
   if (!name) return;
   const list_id = Date.now().toString(36);
   showLoading(true);
- console.log('Creating list:', { list_id, name, creator: userName, chatId });
-const lst = await api('POST', `/api/lists/${chatId}`, { list_id, name, creator: userName });
-console.log('Created:', lst);
+  const lst = await api('POST', `/api/lists/${chatId}`, { list_id, name, creator: userName });
   showLoading(false);
   lists.push(lst);
   closeNewList();
