@@ -7,301 +7,222 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-:root {
-  --primary: #6c5ce7;
-  --primary-light: #a29bfe;
-  --primary-dark: #5f3dc4;
-  --accent: #fd79a8;
-  --secondary: #00b894;
-  --danger: #e17055;
-  --warning: #fdcb6e;
-  --bg: #0a0a1a;
-  --card: #12122a;
-  --card2: #1a1a3e;
-  --input: #1e1e3f;
-  --sidebar: #0d0d20;
-  --text: #ffffff;
-  --text2: #b2b2d0;
-  --muted: #6c6c8a;
-  --border: #2a2a4a;
-  --r: 12px; --rl: 20px;
-  --font: 'Nunito', sans-serif;
-}
+:root{--primary:#6c5ce7;--pl:#a29bfe;--pd:#5f3dc4;--accent:#fd79a8;--ok:#00b894;--danger:#e17055;--warn:#fdcb6e;--bg:#0a0a1a;--card:#12122a;--card2:#1a1a3e;--inp:#1e1e3f;--sb:#0d0d20;--t:#fff;--t2:#b2b2d0;--muted:#6c6c8a;--bord:#2a2a4a;--r:12px;--rl:20px;--font:'Nunito',sans-serif}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden}
-body{font-family:var(--font);background:var(--bg);color:var(--text);height:100dvh;display:flex;flex-direction:column;overflow:hidden}
-
+body{font-family:var(--font);background:var(--bg);color:var(--t);height:100dvh;display:flex;flex-direction:column;overflow:hidden}
 .screen{display:none;flex-direction:column;height:100%;overflow:hidden}
 .screen.active{display:flex}
-
-/* HEADER */
-.hdr{padding:14px 16px 12px;border-bottom:1px solid var(--border);background:rgba(10,10,26,0.97);backdrop-filter:blur(10px);flex-shrink:0;display:flex;align-items:center;gap:10px}
-.hdr h1{font-size:17px;font-weight:900;background:linear-gradient(135deg,var(--primary-light),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;flex:1}
-.back-btn{width:34px;height:34px;background:var(--input);border:1px solid var(--border);border-radius:10px;color:var(--text2);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.hdr-actions{display:flex;gap:6px;flex-shrink:0}
-
-/* LOADING */
-.loading{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:999;transition:opacity 0.3s}
+.hdr{padding:14px 16px 12px;border-bottom:1px solid var(--bord);background:rgba(10,10,26,.97);backdrop-filter:blur(10px);flex-shrink:0;display:flex;align-items:center;gap:10px}
+.hdr h1{font-size:17px;font-weight:900;background:linear-gradient(135deg,var(--pl),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;flex:1}
+.back-btn{width:34px;height:34px;background:var(--inp);border:1px solid var(--bord);border-radius:10px;color:var(--t2);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.loading{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999;transition:opacity .3s}
 .loading.hidden{opacity:0;pointer-events:none}
-.spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin 0.7s linear infinite}
-.loading p{color:var(--muted);font-size:13px}
+.spinner{width:36px;height:36px;border:3px solid var(--bord);border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* HOME */
 .home-body{flex:1;padding:20px 16px;display:flex;flex-direction:column;gap:14px;overflow-y:auto}
-.home-greeting{font-size:22px;font-weight:900;margin-bottom:4px}
-.home-greeting span{background:linear-gradient(135deg,var(--primary-light),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.home-sub{font-size:13px;color:var(--muted);margin-bottom:8px}
-
-.home-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:20px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden}
-.home-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;transition:opacity 0.2s}
+.home-card{background:var(--card);border:1px solid var(--bord);border-radius:var(--rl);padding:20px;cursor:pointer;transition:background .15s;position:relative;overflow:hidden}
+.home-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
 .home-card.shop::before{background:linear-gradient(90deg,var(--primary),var(--accent))}
-.home-card.tasks::before{background:linear-gradient(90deg,var(--warning),var(--accent))}
+.home-card.tasks::before{background:linear-gradient(90deg,var(--warn),var(--accent))}
 .home-card:active{background:var(--card2)}
 .home-card-icon{font-size:36px;margin-bottom:12px}
 .home-card-title{font-size:18px;font-weight:900;margin-bottom:6px}
-.home-card-desc{font-size:13px;color:var(--text2);line-height:1.5}
-.home-card-badge{position:absolute;top:16px;right:16px;background:rgba(108,92,231,0.2);border:1px solid rgba(108,92,231,0.4);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:800;color:var(--primary-light)}
-.home-card.tasks .home-card-badge{background:rgba(253,203,110,0.15);border-color:rgba(253,203,110,0.4);color:var(--warning)}
-
-/* LISTS */
-.scroll-body{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;-webkit-overflow-scrolling:touch}
-
-.list-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:16px;cursor:pointer;transition:background 0.15s;position:relative;overflow:hidden;animation:fadeUp 0.25s ease}
-.list-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--primary),var(--accent));opacity:0;transition:opacity 0.2s}
+.home-card-desc{font-size:13px;color:var(--t2);line-height:1.5}
+.home-badge{position:absolute;top:16px;right:16px;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:800}
+.home-badge.shop{background:rgba(108,92,231,.2);border:1px solid rgba(108,92,231,.4);color:var(--pl)}
+.home-badge.tasks{background:rgba(253,203,110,.15);border:1px solid rgba(253,203,110,.4);color:var(--warn)}
+.scroll-body{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.list-card{background:var(--card);border:1px solid var(--bord);border-radius:var(--rl);padding:16px;cursor:pointer;transition:background .15s;position:relative;overflow:hidden;animation:fadeUp .25s ease}
+.list-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--primary),var(--accent));opacity:0;transition:opacity .2s}
 .list-card:active{background:var(--card2)}
 .list-card:active::before{opacity:1}
 .lc-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.lc-emoji{width:42px;height:42px;background:linear-gradient(135deg,rgba(108,92,231,0.2),rgba(253,121,168,0.1));border:1px solid rgba(108,92,231,0.25);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.lc-emoji{width:42px;height:42px;background:linear-gradient(135deg,rgba(108,92,231,.2),rgba(253,121,168,.1));border:1px solid rgba(108,92,231,.25);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
 .lc-info{flex:1;min-width:0}
 .lc-name{font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .lc-sub{font-size:11px;color:var(--muted);margin-top:2px}
 .lc-del{width:30px;height:30px;background:transparent;border:none;color:var(--muted);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:8px}
-.lc-del:active{color:var(--danger)}
 .prog-row{display:flex;align-items:center;gap:10px}
-.prog-bg{flex:1;height:5px;background:var(--input);border-radius:3px;overflow:hidden}
-.prog-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:3px;transition:width 0.4s ease}
+.prog-bg{flex:1;height:5px;background:var(--inp);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:3px;transition:width .4s ease}
 .prog-label{font-size:11px;color:var(--muted);font-weight:700;flex-shrink:0}
-
-/* BOTTOM SHEET */
-.bs-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:200;display:none;backdrop-filter:blur(4px)}
-.bs-overlay.open{display:block}
-.bs{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-radius:var(--rl) var(--rl) 0 0;border-top:1px solid var(--border);padding:20px 16px 36px;z-index:201;transform:translateY(100%);transition:transform 0.3s cubic-bezier(0.4,0,0.2,1)}
-.bs-overlay.open .bs{transform:translateY(0)}
-.bs-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px}
+.bso{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:200;display:none;backdrop-filter:blur(4px)}
+.bso.open{display:block}
+.bs{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-radius:var(--rl) var(--rl) 0 0;border-top:1px solid var(--bord);padding:20px 16px 36px;z-index:201;transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.bso.open .bs{transform:translateY(0)}
+.bs-handle{width:36px;height:4px;background:var(--bord);border-radius:2px;margin:0 auto 16px}
 .bs h3{font-size:16px;font-weight:800;margin-bottom:16px;text-align:center}
 .field{margin-bottom:12px}
 .field label{display:block;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
-.inp{width:100%;background:var(--input);border:2px solid var(--border);border-radius:var(--r);color:var(--text);font-family:var(--font);font-size:15px;padding:11px 13px;outline:none;transition:border-color 0.2s}
+.inp{width:100%;background:var(--inp);border:2px solid var(--bord);border-radius:var(--r);color:var(--t);font-family:var(--font);font-size:15px;padding:11px 13px;outline:none;transition:border-color .2s}
 .inp:focus{border-color:var(--primary)}
 .inp::placeholder{color:var(--muted)}
 textarea.inp{min-height:70px;resize:none}
-
-/* BUTTONS */
-.btn-primary{width:100%;padding:13px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border:none;border-radius:var(--r);color:#fff;font-family:var(--font);font-size:15px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all 0.2s}
-.btn-primary:active{transform:scale(0.98);opacity:0.9}
-.fab{position:fixed;bottom:20px;right:16px;width:54px;height:54px;background:linear-gradient(135deg,var(--primary),var(--accent));border:none;border-radius:16px;color:#fff;font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(108,92,231,0.4);z-index:50;transition:all 0.2s}
-.fab:active{transform:scale(0.92)}
-
-/* DETAIL */
-.stats-row{display:flex;gap:8px;padding:10px 14px;border-bottom:1px solid var(--border);flex-shrink:0;flex-wrap:wrap}
-.chip{background:var(--input);border:1px solid var(--border);border-radius:20px;padding:4px 11px;font-size:12px;font-weight:700;color:var(--muted)}
-.chip span{color:var(--primary-light)}
-
-.detail-body{flex:1;overflow-y:auto;padding:12px 14px 90px;-webkit-overflow-scrolling:touch}
+.btn-primary{width:100%;padding:13px;background:linear-gradient(135deg,var(--primary),var(--pd));border:none;border-radius:var(--r);color:#fff;font-family:var(--font);font-size:15px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s;margin-top:4px}
+.btn-primary:active{transform:scale(.98);opacity:.9}
+.fab{position:fixed;bottom:20px;right:16px;width:54px;height:54px;background:linear-gradient(135deg,var(--primary),var(--accent));border:none;border-radius:16px;color:#fff;font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(108,92,231,.4);z-index:50;transition:all .2s}
+.fab:active{transform:scale(.92)}
+.stats-row{display:flex;gap:8px;padding:10px 14px;border-bottom:1px solid var(--bord);flex-shrink:0;flex-wrap:wrap}
+.chip{background:var(--inp);border:1px solid var(--bord);border-radius:20px;padding:4px 11px;font-size:12px;font-weight:700;color:var(--muted)}
+.chip span{color:var(--pl)}
+.detail-body{flex:1;overflow-y:auto;padding:12px 14px 10px}
 .cat-section{margin-bottom:18px}
 .cat-lbl{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:8px}
-.cat-lbl::after{content:'';flex:1;height:1px;background:var(--border)}
-
-.item-row{display:flex;align-items:center;gap:12px;padding:11px 14px;background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:6px;cursor:pointer;transition:background 0.12s}
+.cat-lbl::after{content:'';flex:1;height:1px;background:var(--bord)}
+.item-row{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card);border:1px solid var(--bord);border-radius:var(--r);margin-bottom:6px;cursor:pointer;transition:background .12s}
 .item-row:active{background:var(--card2)}
-.item-row.bought{opacity:0.5;background:var(--sidebar)}
+.item-row.bought{opacity:.45;background:var(--sb)}
 .item-row.bought .item-name{text-decoration:line-through;color:var(--muted)}
-.check-c{width:24px;height:24px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;transition:all 0.15s}
-.item-row.bought .check-c{background:var(--secondary);border-color:var(--secondary);color:#fff}
+.check-c{width:24px;height:24px;border-radius:50%;border:2px solid var(--bord);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;transition:all .15s}
+.item-row.bought .check-c{background:var(--ok);border-color:var(--ok);color:#fff}
 .item-info{flex:1;min-width:0}
 .item-name{font-size:14px;font-weight:600}
-.item-buyer{font-size:11px;color:var(--muted);margin-top:2px}
-.item-del{background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;padding:6px;border-radius:8px}
+.item-meta{display:flex;align-items:center;gap:8px;margin-top:3px;flex-wrap:wrap}
+.item-price{font-size:12px;font-weight:800;color:var(--warn)}
+.item-buyer{font-size:11px;color:var(--muted)}
+.item-edit{background:none;border:none;color:var(--muted);font-size:14px;cursor:pointer;padding:6px;border-radius:8px;flex-shrink:0}
+.item-edit:active{color:var(--pl)}
+.item-del{background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;padding:6px;border-radius:8px;flex-shrink:0}
 .item-del:active{color:var(--danger)}
-
-.actions-row{display:flex;gap:8px;padding:10px 14px;border-top:1px solid var(--border);flex-shrink:0;background:var(--bg)}
-.btn-sm{flex:1;padding:10px 6px;border:1px solid var(--border);border-radius:var(--r);background:var(--input);color:var(--text2);font-family:var(--font);font-size:11px;font-weight:700;cursor:pointer;text-align:center}
-.btn-sm:active{background:var(--border)}
-.btn-sm.danger:active{background:rgba(225,112,85,0.15);color:var(--danger);border-color:var(--danger)}
-
-/* CATEGORIES GRID */
-.cats-grid{padding:12px 14px;display:grid;grid-template-columns:1fr 1fr;gap:8px;overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch}
-.cat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:14px 12px;cursor:pointer;transition:all 0.15s;display:flex;flex-direction:column;gap:6px}
+.total-bar{background:var(--card);border-top:2px solid var(--bord);padding:12px 16px;flex-shrink:0}
+.total-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.total-row:last-child{margin-bottom:0;padding-top:8px;border-top:1px solid var(--bord);margin-top:4px}
+.total-label{font-size:12px;color:var(--muted);font-weight:700}
+.total-amount{font-size:14px;font-weight:800}
+.total-row:last-child .total-label{font-size:14px;color:var(--t2)}
+.total-row:last-child .total-amount{font-size:18px;color:var(--warn);font-weight:900}
+.actions-row{display:flex;gap:8px;padding:8px 14px;border-top:1px solid var(--bord);flex-shrink:0;background:var(--bg)}
+.btn-sm{flex:1;padding:9px 6px;border:1px solid var(--bord);border-radius:var(--r);background:var(--inp);color:var(--t2);font-family:var(--font);font-size:11px;font-weight:700;cursor:pointer;text-align:center}
+.btn-sm:active{background:var(--bord)}
+.btn-sm.danger:active{background:rgba(225,112,85,.15);color:var(--danger);border-color:var(--danger)}
+.cats-grid{padding:12px 14px;display:grid;grid-template-columns:1fr 1fr;gap:8px;overflow-y:auto;flex:1}
+.cat-card{background:var(--card);border:1px solid var(--bord);border-radius:var(--rl);padding:14px 12px;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;gap:6px}
 .cat-card:active{background:var(--card2);border-color:var(--primary)}
 .cat-emoji{font-size:26px}
-.cat-name{font-size:12px;font-weight:700;color:var(--text2);line-height:1.3}
-.cat-badge{font-size:10px;font-weight:700;color:var(--primary-light);background:rgba(108,92,231,0.15);border-radius:20px;padding:2px 8px;width:fit-content;display:none}
+.cat-name{font-size:12px;font-weight:700;color:var(--t2);line-height:1.3}
+.cat-badge{font-size:10px;font-weight:700;color:var(--pl);background:rgba(108,92,231,.15);border-radius:20px;padding:2px 8px;width:fit-content;display:none}
 .cat-card.has-sel .cat-badge{display:block}
-
-/* CAT ITEMS */
-.items-scroll{flex:1;overflow-y:auto;padding:12px 14px 80px;-webkit-overflow-scrolling:touch}
+.items-scroll{flex:1;overflow-y:auto;padding:12px 14px 80px}
 .chips-wrap{display:flex;flex-wrap:wrap;gap:8px}
-.item-chip{background:var(--input);border:1.5px solid var(--border);border-radius:22px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;color:var(--text2);user-select:none;transition:all 0.12s}
-.item-chip.sel{background:rgba(108,92,231,0.2);border-color:var(--primary);color:var(--primary-light)}
-.item-chip:active{transform:scale(0.95)}
-
-.custom-row{display:flex;gap:8px;padding:10px 14px;border-top:1px solid var(--border);flex-shrink:0;background:var(--bg)}
-.custom-row input{flex:1;background:var(--input);border:2px solid var(--border);border-radius:var(--r);color:var(--text);font-family:var(--font);font-size:14px;padding:10px 12px;outline:none;transition:border-color 0.2s}
+.item-chip{background:var(--inp);border:1.5px solid var(--bord);border-radius:22px;padding:7px 12px;font-size:13px;font-weight:600;cursor:pointer;color:var(--t2);user-select:none;transition:all .12s;display:flex;align-items:center;gap:6px}
+.item-chip.sel{background:rgba(108,92,231,.2);border-color:var(--primary);color:var(--pl)}
+.item-chip:active{transform:scale(.95)}
+.chip-price{font-size:11px;font-weight:800;color:var(--warn);opacity:.8}
+.item-chip.sel .chip-price{opacity:1}
+.custom-row{display:flex;gap:6px;padding:10px 14px;border-top:1px solid var(--bord);flex-shrink:0;background:var(--bg)}
+.custom-row input{background:var(--inp);border:2px solid var(--bord);border-radius:var(--r);color:var(--t);font-family:var(--font);font-size:14px;padding:10px 12px;outline:none;transition:border-color .2s}
 .custom-row input:focus{border-color:var(--primary)}
 .custom-row input::placeholder{color:var(--muted)}
-.custom-row button{background:linear-gradient(135deg,var(--primary),var(--primary-dark));border:none;border-radius:var(--r);color:#fff;font-size:20px;width:42px;height:42px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-
-/* TASKS */
-.tasks-body{flex:1;overflow-y:auto;padding:14px;-webkit-overflow-scrolling:touch}
-
-/* CALENDAR */
-.calendar{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:14px;margin-bottom:14px}
+.custom-row .main-inp{flex:1}
+.custom-row .price-inp{width:75px}
+.custom-row button{background:linear-gradient(135deg,var(--primary),var(--pd));border:none;border-radius:var(--r);color:#fff;font-size:20px;width:42px;height:42px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.tasks-body{flex:1;overflow-y:auto;padding:14px}
+.calendar{background:var(--card);border:1px solid var(--bord);border-radius:var(--rl);padding:14px;margin-bottom:14px}
 .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .cal-title{font-size:15px;font-weight:800}
-.cal-nav{background:var(--input);border:1px solid var(--border);border-radius:8px;color:var(--text2);width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px}
+.cal-nav{background:var(--inp);border:1px solid var(--bord);border-radius:8px;color:var(--t2);width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
-.cal-day-name{text-align:center;font-size:10px;font-weight:700;color:var(--muted);padding:4px 0;text-transform:uppercase}
-.cal-day{text-align:center;font-size:13px;font-weight:600;padding:6px 2px;border-radius:8px;cursor:pointer;color:var(--text2);position:relative;transition:all 0.15s}
-.cal-day:active{background:var(--card2)}
-.cal-day.today{background:rgba(108,92,231,0.2);color:var(--primary-light);font-weight:800}
+.cal-day-name{text-align:center;font-size:10px;font-weight:700;color:var(--muted);padding:4px 0}
+.cal-day{text-align:center;font-size:13px;font-weight:600;padding:6px 2px;border-radius:8px;cursor:pointer;color:var(--t2);position:relative;transition:all .15s}
+.cal-day.today{background:rgba(108,92,231,.2);color:var(--pl);font-weight:800}
 .cal-day.selected{background:var(--primary);color:#fff;font-weight:800}
 .cal-day.has-task::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:4px;height:4px;background:var(--accent);border-radius:50%}
 .cal-day.empty{cursor:default}
-
-.task-section-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin:16px 0 8px;display:flex;align-items:center;gap:8px}
-.task-section-title::after{content:'';flex:1;height:1px;background:var(--border)}
-
-.task-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:8px;animation:fadeUp 0.2s ease;position:relative;overflow:hidden;cursor:pointer;transition:background 0.12s}
-.task-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--warning),var(--accent))}
+.task-sec{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin:16px 0 8px;display:flex;align-items:center;gap:8px}
+.task-sec::after{content:'';flex:1;height:1px;background:var(--bord)}
+.task-card{background:var(--card);border:1px solid var(--bord);border-radius:var(--r);padding:14px;margin-bottom:8px;animation:fadeUp .2s ease;position:relative;overflow:hidden;cursor:pointer;transition:background .12s}
+.task-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--warn),var(--accent))}
 .task-card:active{background:var(--card2)}
-.task-card.done{opacity:0.45}
+.task-card.done{opacity:.45}
 .task-card.done .task-title{text-decoration:line-through;color:var(--muted)}
 .task-card.today-task::before{background:linear-gradient(180deg,var(--accent),var(--primary))}
 .task-top{display:flex;align-items:flex-start;gap:10px}
-.task-check{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;margin-top:2px;transition:all 0.15s}
-.task-card.done .task-check{background:var(--secondary);border-color:var(--secondary);color:#fff}
-.task-body{flex:1;min-width:0}
+.task-check{width:22px;height:22px;border-radius:50%;border:2px solid var(--bord);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;margin-top:2px}
+.task-card.done .task-check{background:var(--ok);border-color:var(--ok);color:#fff}
+.task-body2{flex:1;min-width:0}
 .task-title{font-size:14px;font-weight:700;margin-bottom:4px}
-.task-desc{font-size:12px;color:var(--text2);line-height:1.4;margin-bottom:6px}
+.task-desc{font-size:12px;color:var(--t2);line-height:1.4;margin-bottom:6px}
 .task-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.task-date-badge{font-size:11px;font-weight:700;padding:2px 10px;border-radius:20px;background:rgba(253,203,110,0.15);color:var(--warning);border:1px solid rgba(253,203,110,0.3)}
-.task-date-badge.today-badge{background:rgba(253,121,168,0.15);color:var(--accent);border-color:rgba(253,121,168,0.3)}
+.task-date{font-size:11px;font-weight:700;padding:2px 10px;border-radius:20px;background:rgba(253,203,110,.15);color:var(--warn);border:1px solid rgba(253,203,110,.3)}
+.task-date.today{background:rgba(253,121,168,.15);color:var(--accent);border-color:rgba(253,121,168,.3)}
 .task-creator{font-size:11px;color:var(--muted)}
 .task-del{position:absolute;top:10px;right:10px;background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;padding:4px;border-radius:6px}
-.task-del:active{color:var(--danger)}
-
 .empty-state{padding:50px 20px;text-align:center;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:10px}
 .empty-state .big{font-size:48px}
 .empty-state p{font-size:14px;line-height:1.6}
-
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-::-webkit-scrollbar{width:3px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bord);border-radius:2px}
 </style>
 </head>
 <body>
-
-<div class="loading" id="loading"><div class="spinner"></div><p>Загрузка...</p></div>
-
-<!-- HOME -->
+<div class="loading" id="loading"><div class="spinner"></div></div>
 <div class="screen active" id="s-home">
-  <div class="hdr"><h1>👋 Привет, <span id="home-name">...</span></h1></div>
+  <div class="hdr"><h1 id="home-title">👋 Привет!</h1></div>
   <div class="home-body">
-    <div class="home-greeting"><span id="home-greeting-text">Добро пожаловать!</span></div>
-    <div class="home-sub" id="home-sub">Выбери что хочешь открыть</div>
     <div class="home-card shop" onclick="goShop()">
-      <div class="home-card-badge" id="badge-shop">0 списков</div>
+      <div class="home-badge shop" id="badge-shop">0 списков</div>
       <div class="home-card-icon">🛒</div>
       <div class="home-card-title">Списки покупок</div>
-      <div class="home-card-desc">Создавай списки, добавляй товары по категориям, отмечай купленное вместе с командой</div>
+      <div class="home-card-desc">Создавай списки, добавляй товары с ценами, смотри итого и отмечай купленное</div>
     </div>
     <div class="home-card tasks" onclick="goTasks()">
-      <div class="home-card-badge" id="badge-tasks" style="background:rgba(253,203,110,0.15);border-color:rgba(253,203,110,0.4);color:var(--warning)">0 задач</div>
+      <div class="home-badge tasks" id="badge-tasks">0 задач</div>
       <div class="home-card-icon">📅</div>
       <div class="home-card-title">Задачи и события</div>
-      <div class="home-card-desc">Планируй события с датой и временем, получай уведомления в чат когда наступает день задачи</div>
+      <div class="home-card-desc">Планируй события с датой и временем, получай уведомления в чат</div>
     </div>
   </div>
 </div>
-
-<!-- LISTS -->
 <div class="screen" id="s-lists">
-  <div class="hdr">
-    <button class="back-btn" onclick="goTo('s-home')">←</button>
-    <h1>🛒 Списки покупок</h1>
-  </div>
+  <div class="hdr"><button class="back-btn" onclick="goTo('s-home')">←</button><h1>🛒 Списки покупок</h1></div>
   <div class="scroll-body" id="lists-body"></div>
   <button class="fab" onclick="openBS('bs-newlist')">＋</button>
 </div>
-
-<!-- LIST DETAIL -->
 <div class="screen" id="s-detail">
   <div class="hdr">
     <button class="back-btn" onclick="goTo('s-lists',loadLists)">←</button>
     <h1 id="detail-title">Список</h1>
-    <div class="hdr-actions">
-      <button class="back-btn" onclick="goTo('s-add',renderCats)" style="font-size:20px">＋</button>
-    </div>
+    <button class="back-btn" onclick="goTo('s-add',renderCats)" style="font-size:20px">＋</button>
   </div>
   <div class="stats-row" id="detail-stats"></div>
   <div class="detail-body" id="detail-body"></div>
+  <div class="total-bar" id="total-bar"></div>
   <div class="actions-row">
     <button class="btn-sm" onclick="clearBought()">🧹 Убрать купленные</button>
     <button class="btn-sm danger" onclick="deleteCurrentList()">❌ Удалить список</button>
   </div>
 </div>
-
-<!-- ADD ITEMS -->
 <div class="screen" id="s-add">
-  <div class="hdr">
-    <button class="back-btn" onclick="goTo('s-detail',renderDetail)">←</button>
-    <h1>➕ Добавить товары</h1>
-  </div>
+  <div class="hdr"><button class="back-btn" onclick="goTo('s-detail',renderDetail)">←</button><h1>➕ Добавить товары</h1></div>
   <div class="cats-grid" id="cats-grid"></div>
   <div class="custom-row">
-    <input id="g-custom" placeholder="✏️ Свой товар..." maxlength="50"/>
+    <input class="main-inp" id="g-custom" placeholder="✏️ Свой товар..." maxlength="50"/>
+    <input class="price-inp" id="g-price" placeholder="₽" type="number" step="0.1" min="0"/>
     <button onclick="addCustom()">＋</button>
   </div>
 </div>
-
-<!-- CAT ITEMS -->
 <div class="screen" id="s-cat">
-  <div class="hdr">
-    <button class="back-btn" onclick="goTo('s-add',renderCats)">←</button>
-    <h1 id="cat-title">Категория</h1>
-  </div>
+  <div class="hdr"><button class="back-btn" onclick="goTo('s-add',renderCats)">←</button><h1 id="cat-title">Категория</h1></div>
   <div class="items-scroll"><div class="chips-wrap" id="cat-chips"></div></div>
 </div>
-
-<!-- TASKS -->
 <div class="screen" id="s-tasks">
-  <div class="hdr">
-    <button class="back-btn" onclick="goTo('s-home')">←</button>
-    <h1>📅 Задачи</h1>
-  </div>
+  <div class="hdr"><button class="back-btn" onclick="goTo('s-home')">←</button><h1>📅 Задачи</h1></div>
   <div class="tasks-body" id="tasks-body"></div>
-  <button class="fab" style="background:linear-gradient(135deg,var(--warning),var(--accent));box-shadow:0 8px 24px rgba(253,203,110,0.3)" onclick="openBS('bs-newtask')">＋</button>
+  <button class="fab" style="background:linear-gradient(135deg,var(--warn),var(--accent));box-shadow:0 8px 24px rgba(253,203,110,.3)" onclick="openBS('bs-newtask')">＋</button>
 </div>
-
-<!-- BS: NEW LIST -->
-<div class="bs-overlay" id="bs-newlist" onclick="closeBS('bs-newlist')">
+<div class="bso" id="bs-newlist" onclick="closeBS('bs-newlist')">
   <div class="bs" onclick="event.stopPropagation()">
-    <div class="bs-handle"></div>
-    <h3>Новый список покупок</h3>
-    <div class="field"><label>Название</label><input class="inp" id="nl-name" placeholder="«Пятница», «IKEA», «Аптека»..." maxlength="40"/></div>
+    <div class="bs-handle"></div><h3>Новый список покупок</h3>
+    <div class="field"><label>Название</label><input class="inp" id="nl-name" placeholder="«Пятница», «IKEA»..." maxlength="40"/></div>
     <button class="btn-primary" onclick="createList()">✓ Создать список</button>
   </div>
 </div>
-
-<!-- BS: NEW TASK -->
-<div class="bs-overlay" id="bs-newtask" onclick="closeBS('bs-newtask')">
+<div class="bso" id="bs-newtask" onclick="closeBS('bs-newtask')">
   <div class="bs" onclick="event.stopPropagation()">
-    <div class="bs-handle"></div>
-    <h3>Новая задача</h3>
+    <div class="bs-handle"></div><h3>Новая задача</h3>
     <div class="field"><label>Название</label><input class="inp" id="nt-title" placeholder="День рождения Гриши..." maxlength="60"/></div>
-    <div class="field"><label>Описание (необязательно)</label><textarea class="inp" id="nt-desc" placeholder="Подробности..."></textarea></div>
+    <div class="field"><label>Описание</label><textarea class="inp" id="nt-desc" placeholder="Подробности..."></textarea></div>
     <div style="display:flex;gap:10px;margin-bottom:12px">
       <div class="field" style="flex:1;margin:0"><label>Дата</label><input class="inp" id="nt-date" type="date"/></div>
       <div class="field" style="flex:1;margin:0"><label>Время</label><input class="inp" id="nt-time" type="time"/></div>
@@ -309,471 +230,325 @@ textarea.inp{min-height:70px;resize:none}
     <button class="btn-primary" onclick="createTask()">✓ Создать задачу</button>
   </div>
 </div>
-
+<div class="bso" id="bs-edit" onclick="closeBS('bs-edit')">
+  <div class="bs" onclick="event.stopPropagation()">
+    <div class="bs-handle"></div><h3>Редактировать товар</h3>
+    <div class="field"><label>Название</label><input class="inp" id="edit-name" maxlength="60"/></div>
+    <div class="field"><label>Цена (₽)</label><input class="inp" id="edit-price" type="number" step="0.1" min="0" placeholder="0"/></div>
+    <button class="btn-primary" onclick="saveEdit()">✓ Сохранить</button>
+  </div>
+</div>
 <script>
-const tg = window.Telegram?.WebApp;
-if (tg) { tg.ready(); tg.expand(); }
-
-const API = 'https://chatverse-r3y1.onrender.com';
-const urlParams = new URLSearchParams(window.location.search);
-const userName = urlParams.get('user') ? decodeURIComponent(urlParams.get('user')) : (tg?.initDataUnsafe?.user?.first_name || 'Пользователь');
-
-// chat_id: из URL параметра или из Telegram
-const chatId = urlParams.get('chat_id') ||
-               tg?.initDataUnsafe?.chat?.id ||
-               tg?.initDataUnsafe?.user?.id ||
-               'test';
-
-// ── State ──
-let lists = [], tasks = [], currentList = null, currentCatId = null;
-let calYear = new Date().getFullYear(), calMonth = new Date().getMonth();
-let selectedDate = null;
-
-// ── Helpers ──
-function showLoad(v) {
-  document.getElementById('loading').classList.toggle('hidden', !v);
-}
-function $(id) { return document.getElementById(id); }
-
-async function api(method, path, body) {
-  const opts = { method, headers: { 'Content-Type': 'application/json' } };
-  if (body) opts.body = JSON.stringify(body);
-  const r = await fetch(API + path, opts);
-  if (!r.ok) throw new Error(await r.text());
+const tg=window.Telegram?.WebApp;
+if(tg){tg.ready();tg.expand();}
+const urlParams=new URLSearchParams(window.location.search);
+const userName=urlParams.get('user')?decodeURIComponent(urlParams.get('user')):(tg?.initDataUnsafe?.user?.first_name||'Пользователь');
+const chatId=urlParams.get('chat_id')||tg?.initDataUnsafe?.chat?.id||tg?.initDataUnsafe?.user?.id||'test';
+const API='https://chatverse-r3y1.onrender.com';
+let lists=[],tasks=[],currentList=null,currentCatId=null,editKey=null;
+let calY=new Date().getFullYear(),calM=new Date().getMonth(),selDate=null;
+function $(id){return document.getElementById(id)}
+function showLoad(v){$('loading').classList.toggle('hidden',!v)}
+async function req(method,path,body){
+  const o={method,headers:{'Content-Type':'application/json'}};
+  if(body) o.body=JSON.stringify(body);
+  const r=await fetch(API+path,o);
+  if(!r.ok) throw new Error(await r.text());
   return r.json();
 }
-
-function openBS(id) {
+function openBS(id){
   $(id).classList.add('open');
-  // Set today's date as default for new task
-  if (id === 'bs-newtask') {
-    const today = new Date().toISOString().split('T')[0];
-    $('nt-date').value = today;
-    $('nt-time').value = '';
-    $('nt-title').value = '';
-    $('nt-desc').value = '';
-  }
-  if (id === 'bs-newlist') $('nl-name').value = '';
+  if(id==='bs-newtask'){$('nt-date').value=new Date().toISOString().split('T')[0];$('nt-time').value='';$('nt-title').value='';$('nt-desc').value='';}
+  if(id==='bs-newlist') $('nl-name').value='';
 }
-function closeBS(id) { $(id).classList.remove('open'); }
-
-function goTo(screenId, fn) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  $(screenId).classList.add('active');
-  if (fn) fn();
+function closeBS(id){$(id).classList.remove('open')}
+function goTo(sid,fn){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(sid).classList.add('active');if(fn)fn();}
+function goShop(){goTo('s-lists',renderLists)}
+function goTasks(){goTo('s-tasks',renderTasks)}
+function renderHome(){
+  $('home-title').textContent='👋 '+userName;
+  $('badge-shop').textContent=`${lists.length} ${lists.length===1?'список':lists.length<5?'списка':'списков'}`;
+  const at=tasks.filter(t=>!t.done).length;
+  $('badge-tasks').textContent=`${at} ${at===1?'задача':at<5?'задачи':'задач'}`;
 }
-
-// ── HOME ──
-function renderHome() {
-  $('home-name').textContent = userName;
-  const today = new Date();
-  const h = today.getHours();
-  const greeting = h < 12 ? 'Доброе утро' : h < 17 ? 'Добрый день' : 'Добрый вечер';
-  $('home-greeting-text').textContent = greeting + ', ' + userName + '!';
-  $('home-sub').textContent = 'Выбери что хочешь открыть';
-  $('badge-shop').textContent = `${lists.length} ${lists.length === 1 ? 'список' : lists.length < 5 ? 'списка' : 'списков'}`;
-  const activeTasks = tasks.filter(t => !t.done).length;
-  $('badge-tasks').textContent = `${activeTasks} ${activeTasks === 1 ? 'задача' : activeTasks < 5 ? 'задачи' : 'задач'}`;
-}
-
-function goShop() { goTo('s-lists', renderLists); }
-function goTasks() { goTo('s-tasks', renderTasks); }
-
-// ── LISTS ──
-async function loadLists() {
-  try { lists = await api('GET', `/api/shopping/${chatId}`); } catch(e) { lists = []; }
-  renderLists();
-}
-
-function renderLists() {
-  const body = $('lists-body');
-  if (!lists.length) {
-    body.innerHTML = `<div class="empty-state"><div class="big">🛒</div><p>Нет списков.<br>Нажми <b>+</b> чтобы создать!</p></div>`;
-    return;
-  }
-  const emojis = ['🛒','🧺','📋','🏪','🏬','🏡','🎯','📦'];
-  body.innerHTML = lists.map(lst => {
-    const items = Object.values(lst.items || {});
-    const total = items.length, bought = items.filter(i=>i.bought).length;
-    const pct = total ? Math.round(bought/total*100) : 0;
-    const emoji = emojis[Math.abs((lst.list_id||'').charCodeAt(0)||0) % emojis.length];
+async function loadLists(){try{lists=await req('GET',`/api/shopping/${chatId}`)}catch(e){lists=[]}renderLists()}
+function renderLists(){
+  const body=$('lists-body');
+  if(!lists.length){body.innerHTML=`<div class="empty-state"><div class="big">🛒</div><p>Нет списков.<br>Нажми <b>+</b> чтобы создать!</p></div>`;return}
+  const em=['🛒','🧺','📋','🏪','🏬','🏡','🎯','📦'];
+  body.innerHTML=lists.map(lst=>{
+    const items=Object.values(lst.items||{});
+    const tot=items.length,bot=items.filter(i=>i.bought).length;
+    const pct=tot?Math.round(bot/tot*100):0;
+    const tp=items.reduce((s,i)=>s+(parseFloat(i.price)||0),0);
+    const emoji=em[Math.abs((lst.list_id||'').charCodeAt(0)||0)%em.length];
     return `<div class="list-card" onclick="openList('${lst.list_id}')">
       <div class="lc-top">
         <div class="lc-emoji">${emoji}</div>
         <div class="lc-info">
           <div class="lc-name">${lst.name}</div>
-          <div class="lc-sub">создал(а) ${lst.creator} · ${total} товаров</div>
+          <div class="lc-sub">${lst.creator} · ${tot} товаров${tp>0?' · '+tp.toFixed(1)+' ₽':''}</div>
         </div>
-        <button class="lc-del" onclick="event.stopPropagation();deleteList('${lst.list_id}')">✕</button>
+        <button class="lc-del" onclick="event.stopPropagation();delList('${lst.list_id}')">✕</button>
       </div>
-      <div class="prog-row">
-        <div class="prog-bg"><div class="prog-fill" style="width:${pct}%"></div></div>
-        <div class="prog-label">${bought}/${total}</div>
-      </div>
+      <div class="prog-row"><div class="prog-bg"><div class="prog-fill" style="width:${pct}%"></div></div><div class="prog-label">${bot}/${tot}</div></div>
     </div>`;
   }).join('');
 }
-
-async function createList() {
-  const name = $('nl-name').value.trim();
-  if (!name) return;
-  closeBS('bs-newlist');
-  showLoad(true);
-  try {
-    const list_id = Date.now().toString(36);
-    const lst = await api('POST', `/api/shopping/${chatId}`, { list_id, name, creator: userName });
-    lists.push(lst);
-    currentList = lst;
-    renderDetail();
-    goTo('s-detail');
-  } catch(e) { alert('Ошибка: ' + e.message); }
+async function createList(){
+  const name=$('nl-name').value.trim();if(!name) return;
+  closeBS('bs-newlist');showLoad(true);
+  try{const id=Date.now().toString(36);const lst=await req('POST',`/api/shopping/${chatId}`,{list_id:id,name,creator:userName});lists.push(lst);currentList=lst;renderDetail();goTo('s-detail');}catch(e){alert('Ошибка: '+e.message)}
   showLoad(false);
 }
-
-async function deleteList(listId) {
-  if (!confirm('Удалить список?')) return;
-  await api('DELETE', `/api/shopping/${chatId}/${listId}`);
-  lists = lists.filter(l => l.list_id !== listId);
-  renderLists();
+async function delList(lid){
+  if(!confirm('Удалить список?')) return;
+  await req('DELETE',`/api/shopping/${chatId}/${lid}`);
+  lists=lists.filter(l=>l.list_id!==lid);renderLists();
 }
-
-function openList(listId) {
-  currentList = lists.find(l => l.list_id === listId);
-  renderDetail();
-  goTo('s-detail');
+function openList(lid){currentList=lists.find(l=>l.list_id===lid);renderDetail();goTo('s-detail')}
+function calcT(items){
+  const all=items.reduce((s,[,v])=>s+(parseFloat(v.price)||0),0);
+  const bs=items.filter(([,v])=>v.bought).reduce((s,[,v])=>s+(parseFloat(v.price)||0),0);
+  return{all,bs,rem:all-bs};
 }
-
-// ── DETAIL ──
-function renderDetail() {
-  if (!currentList) return;
-  $('detail-title').textContent = currentList.name;
-  const items = Object.entries(currentList.items || {});
-  const total = items.length, bought = items.filter(([,v])=>v.bought).length;
-  $('detail-stats').innerHTML = `
-    <div class="chip">Всего: <span>${total}</span></div>
-    <div class="chip">Куплено: <span>${bought}</span></div>
-    <div class="chip">Осталось: <span>${total-bought}</span></div>`;
-
-  if (!total) {
-    $('detail-body').innerHTML = `<div class="empty-state"><div class="big">📝</div><p>Список пуст.<br>Нажми <b>+</b> чтобы добавить товары.</p></div>`;
-    return;
-  }
-  const groups = {};
-  items.forEach(([key,val]) => { (groups[val.cat_id||'other'] = groups[val.cat_id||'other']||[]).push([key,val]); });
-  let html = '';
-  [...CATS.map(c=>c.id),'custom'].forEach(cid => {
-    if (!groups[cid]) return;
-    const cat = CAT_MAP[cid];
-    const lbl = cat ? `${cat.e} ${cat.n}` : '✏️ Свои товары';
-    html += `<div class="cat-section"><div class="cat-lbl">${lbl}</div>`;
-    groups[cid].forEach(([key,val]) => {
-      const bc = val.bought ? 'bought' : '';
-      const buyer = val.bought && val.buyer ? `<div class="item-buyer">✓ ${val.buyer}</div>` : '';
-      html += `<div class="item-row ${bc}" onclick="toggleBought('${key}')">
-        <div class="check-c">${val.bought?'✓':''}</div>
-        <div class="item-info"><div class="item-name">${val.name}</div>${buyer}</div>
-        <button class="item-del" onclick="event.stopPropagation();removeItem('${key}')">✕</button>
+function renderDetail(){
+  if(!currentList) return;
+  $('detail-title').textContent=currentList.name;
+  const items=Object.entries(currentList.items||{});
+  const tot=items.length,bot=items.filter(([,v])=>v.bought).length;
+  $('detail-stats').innerHTML=`<div class="chip">Всего: <span>${tot}</span></div><div class="chip">Куплено: <span>${bot}</span></div><div class="chip">Осталось: <span>${tot-bot}</span></div>`;
+  if(!tot){$('detail-body').innerHTML=`<div class="empty-state"><div class="big">📝</div><p>Список пуст.<br>Нажми <b>+</b> чтобы добавить товары.</p></div>`;$('total-bar').innerHTML='';return}
+  const groups={};
+  items.forEach(([k,v])=>{const c=v.cat_id||'other';(groups[c]=groups[c]||[]).push([k,v])});
+  let html='';
+  [...CATS.map(c=>c.id),'custom'].forEach(cid=>{
+    if(!groups[cid]) return;
+    const cat=CAT_MAP[cid];
+    const lbl=cat?`${cat.e} ${cat.n}`:'✏️ Свои товары';
+    html+=`<div class="cat-section"><div class="cat-lbl">${lbl}</div>`;
+    groups[cid].forEach(([k,v])=>{
+      const pr=v.price?`<span class="item-price">₽${parseFloat(v.price).toFixed(1)}</span>`:'';
+      const by=v.bought&&v.buyer?`<span class="item-buyer">✓ ${v.buyer}</span>`:'';
+      const meta=(pr||by)?`<div class="item-meta">${pr}${by}</div>`:'';
+      html+=`<div class="item-row ${v.bought?'bought':''}" onclick="toggleB('${k}')">
+        <div class="check-c">${v.bought?'✓':''}</div>
+        <div class="item-info"><div class="item-name">${v.name}</div>${meta}</div>
+        <button class="item-edit" onclick="event.stopPropagation();openEdit('${k}')">✏️</button>
+        <button class="item-del" onclick="event.stopPropagation();removeItem('${k}')">✕</button>
       </div>`;
     });
-    html += `</div>`;
+    html+=`</div>`;
   });
-  $('detail-body').innerHTML = html;
+  $('detail-body').innerHTML=html;
+  const {all,bs,rem}=calcT(items);
+  if(all>0){
+    $('total-bar').innerHTML=`
+      <div class="total-row"><span class="total-label">Куплено</span><span class="total-amount" style="color:var(--ok)">${bs.toFixed(1)} ₽</span></div>
+      <div class="total-row"><span class="total-label">Осталось купить</span><span class="total-amount" style="color:var(--t2)">${rem.toFixed(1)} ₽</span></div>
+      <div class="total-row"><span class="total-label">Итого всего</span><span class="total-amount" style="color:var(--warn);font-size:18px;font-weight:900">${all.toFixed(1)} ₽</span></div>`;
+  } else $('total-bar').innerHTML='';
 }
-
-async function toggleBought(key) {
-  try {
-    const updated = await api('POST', `/api/shopping/${chatId}/${currentList.list_id}/buy`, { key, buyer: userName });
-    currentList = updated;
-    // Обновляем только затронутый элемент без перерисовки всего
-    const item = updated.items[key];
-    const row = document.querySelector(`.item-row[onclick="toggleBought('${key}')"]`);
-    if (row && item) {
-      row.classList.toggle('bought', item.bought);
-      row.querySelector('.check-c').textContent = item.bought ? '✓' : '';
-      const nameEl = row.querySelector('.item-name');
-      if (nameEl) nameEl.textContent = item.name;
-      let buyerEl = row.querySelector('.item-buyer');
-      if (item.bought && item.buyer) {
-        if (!buyerEl) { buyerEl = document.createElement('div'); buyerEl.className='item-buyer'; row.querySelector('.item-info').appendChild(buyerEl); }
-        buyerEl.textContent = '✓ ' + item.buyer;
-      } else if (buyerEl) buyerEl.remove();
-      // update stats
-      const items2 = Object.values(updated.items||{});
-      const t = items2.length, b = items2.filter(i=>i.bought).length;
-      $('detail-stats').innerHTML = `<div class="chip">Всего: <span>${t}</span></div><div class="chip">Куплено: <span>${b}</span></div><div class="chip">Осталось: <span>${t-b}</span></div>`;
+function openEdit(k){
+  editKey=k;
+  const item=currentList.items[k];
+  $('edit-name').value=item.name;
+  $('edit-price').value=item.price||'';
+  openBS('bs-edit');
+}
+async function saveEdit(){
+  if(!editKey) return;
+  const name=$('edit-name').value.trim();
+  const price=parseFloat($('edit-price').value)||0;
+  if(!name) return;
+  closeBS('bs-edit');showLoad(true);
+  try{
+    const upd=await req('POST',`/api/shopping/${chatId}/${currentList.list_id}/edititem`,{key:editKey,name,price});
+    currentList=upd;
+    const idx=lists.findIndex(l=>l.list_id===currentList.list_id);if(idx>=0)lists[idx]=upd;
+    renderDetail();
+  }catch(e){alert('Ошибка: '+e.message)}
+  showLoad(false);editKey=null;
+}
+async function toggleB(k){
+  try{
+    const upd=await req('POST',`/api/shopping/${chatId}/${currentList.list_id}/buy`,{key:k,buyer:userName});
+    currentList=upd;
+    const idx=lists.findIndex(l=>l.list_id===currentList.list_id);if(idx>=0)lists[idx]=upd;
+    const item=upd.items[k];
+    const row=document.querySelector(`.item-row[onclick="toggleB('${k}')"]`);
+    if(row&&item){
+      row.classList.toggle('bought',item.bought);
+      row.querySelector('.check-c').textContent=item.bought?'✓':'';
+      let meta=row.querySelector('.item-meta');
+      const pr=item.price?`<span class="item-price">₽${parseFloat(item.price).toFixed(1)}</span>`:'';
+      const by=item.bought&&item.buyer?`<span class="item-buyer">✓ ${item.buyer}</span>`:'';
+      if(pr||by){if(!meta){meta=document.createElement('div');meta.className='item-meta';row.querySelector('.item-info').appendChild(meta)}meta.innerHTML=pr+by;}
+      else if(meta) meta.remove();
     }
-    // update list in array
-    const idx = lists.findIndex(l=>l.list_id===currentList.list_id);
-    if (idx>=0) lists[idx] = updated;
+    const items2=Object.entries(upd.items||{});
+    const t=items2.length,b=items2.filter(([,v])=>v.bought).length;
+    $('detail-stats').innerHTML=`<div class="chip">Всего: <span>${t}</span></div><div class="chip">Куплено: <span>${b}</span></div><div class="chip">Осталось: <span>${t-b}</span></div>`;
+    const {all,bs,rem}=calcT(items2);
+    if(all>0){$('total-bar').innerHTML=`<div class="total-row"><span class="total-label">Куплено</span><span class="total-amount" style="color:var(--ok)">${bs.toFixed(1)} ₽</span></div><div class="total-row"><span class="total-label">Осталось купить</span><span class="total-amount" style="color:var(--t2)">${rem.toFixed(1)} ₽</span></div><div class="total-row"><span class="total-label">Итого всего</span><span class="total-amount" style="color:var(--warn);font-size:18px;font-weight:900">${all.toFixed(1)} ₽</span></div>`;}
     tg?.HapticFeedback?.impactOccurred('light');
-  } catch(e) { console.error(e); }
+  }catch(e){console.error(e)}
 }
-
-async function removeItem(key) {
-  const updated = await api('DELETE', `/api/shopping/${chatId}/${currentList.list_id}/item`, { key });
-  currentList = updated;
-  const idx = lists.findIndex(l=>l.list_id===currentList.list_id);
-  if (idx>=0) lists[idx] = updated;
-  renderDetail();
+async function removeItem(k){
+  const upd=await req('DELETE',`/api/shopping/${chatId}/${currentList.list_id}/item`,{key:k});
+  currentList=upd;const idx=lists.findIndex(l=>l.list_id===currentList.list_id);if(idx>=0)lists[idx]=upd;renderDetail();
 }
-
-async function clearBought() {
-  const updated = await api('POST', `/api/shopping/${chatId}/${currentList.list_id}/clearbought`, {});
-  currentList = updated;
-  const idx = lists.findIndex(l=>l.list_id===currentList.list_id);
-  if (idx>=0) lists[idx] = updated;
-  renderDetail();
+async function clearBought(){
+  const upd=await req('POST',`/api/shopping/${chatId}/${currentList.list_id}/clearbought`,{});
+  currentList=upd;const idx=lists.findIndex(l=>l.list_id===currentList.list_id);if(idx>=0)lists[idx]=upd;renderDetail();
 }
-
-async function deleteCurrentList() {
-  if (!confirm(`Удалить список «${currentList.name}»?`)) return;
-  await api('DELETE', `/api/shopping/${chatId}/${currentList.list_id}`);
-  lists = lists.filter(l=>l.list_id!==currentList.list_id);
-  currentList = null;
-  goTo('s-lists', renderLists);
+async function deleteCurrentList(){
+  if(!confirm(`Удалить список «${currentList.name}»?`)) return;
+  await req('DELETE',`/api/shopping/${chatId}/${currentList.list_id}`);
+  lists=lists.filter(l=>l.list_id!==currentList.list_id);currentList=null;goTo('s-lists',renderLists);
 }
-
-// ── ADD ITEMS ──
-function renderCats() {
-  const cur = currentList?.items || {};
-  $('cats-grid').innerHTML = CATS.map(cat => {
-    const cnt = Object.values(cur).filter(i=>i.cat_id===cat.id).length;
-    return `<div class="cat-card ${cnt>0?'has-sel':''}" onclick="openCat('${cat.id}')">
-      <div class="cat-emoji">${cat.e}</div>
-      <div class="cat-name">${cat.n}</div>
-      <div class="cat-badge">${cnt} выбрано</div>
-    </div>`;
+function renderCats(){
+  const cur=currentList?.items||{};
+  $('cats-grid').innerHTML=CATS.map(cat=>{
+    const cnt=Object.values(cur).filter(i=>i.cat_id===cat.id).length;
+    return `<div class="cat-card ${cnt>0?'has-sel':''}" onclick="openCat('${cat.id}')"><div class="cat-emoji">${cat.e}</div><div class="cat-name">${cat.n}</div><div class="cat-badge">${cnt} выбрано</div></div>`;
   }).join('');
 }
-
-function openCat(catId) {
-  currentCatId = catId;
-  const cat = CAT_MAP[catId];
-  $('cat-title').textContent = `${cat.e} ${cat.n}`;
-  renderCatChips();
-  goTo('s-cat');
-}
-
-function renderCatChips() {
-  const cat = CAT_MAP[currentCatId];
-  const cur = currentList?.items || {};
-  $('cat-chips').innerHTML = cat.items.map(item => {
-    const key = `${currentCatId}::${item}`;
-    return `<div class="item-chip ${key in cur?'sel':''}" onclick="toggleChip('${key}','${item.replace(/'/g,"\\'")}',this)">${item}</div>`;
+function openCat(cid){currentCatId=cid;const cat=CAT_MAP[cid];$('cat-title').textContent=`${cat.e} ${cat.n}`;renderChips();goTo('s-cat')}
+function renderChips(){
+  const cat=CAT_MAP[currentCatId],cur=currentList?.items||{};
+  $('cat-chips').innerHTML=cat.items.map(item=>{
+    const k=`${currentCatId}::${item.n}`;const sel=k in cur?'sel':'';
+    const pp=item.p?`<span class="chip-price">${item.p}₽</span>`:'';
+    return `<div class="item-chip ${sel}" onclick="toggleChip('${k}','${item.n.replace(/'/g,"\\'")}',${item.p||0},this)">${item.n}${pp}</div>`;
   }).join('');
 }
-
-async function toggleChip(key, itemName, el) {
-  try {
-    const updated = await api('POST', `/api/shopping/${chatId}/${currentList.list_id}/toggle`, {
-      key, name: itemName, cat_id: currentCatId, added_by: userName
-    });
-    currentList = updated;
-    const idx = lists.findIndex(l=>l.list_id===currentList.list_id);
-    if (idx>=0) lists[idx] = updated;
-    el.classList.toggle('sel', key in (updated.items||{}));
-    renderCats();
-    tg?.HapticFeedback?.impactOccurred('light');
-  } catch(e) { console.error(e); }
+async function toggleChip(k,name,price,el){
+  try{
+    const upd=await req('POST',`/api/shopping/${chatId}/${currentList.list_id}/toggle`,{key:k,name,cat_id:currentCatId,added_by:userName,price});
+    currentList=upd;const idx=lists.findIndex(l=>l.list_id===currentList.list_id);if(idx>=0)lists[idx]=upd;
+    el.classList.toggle('sel',k in (upd.items||{}));renderCats();tg?.HapticFeedback?.impactOccurred('light');
+  }catch(e){console.error(e)}
 }
-
-async function addCustom() {
-  const input = $('g-custom'), val = input.value.trim();
-  if (!val) return;
-  showLoad(true);
-  const updated = await api('POST', `/api/shopping/${chatId}/${currentList.list_id}/custom`, { name: val, added_by: userName });
-  currentList = updated;
-  const idx = lists.findIndex(l=>l.list_id===currentList.list_id);
-  if (idx>=0) lists[idx] = updated;
-  input.value = '';
-  renderCats();
-  showLoad(false);
-  tg?.HapticFeedback?.notificationOccurred('success');
+async function addCustom(){
+  const inp=$('g-custom'),val=inp.value.trim(),price=parseFloat($('g-price').value)||0;
+  if(!val) return;showLoad(true);
+  const upd=await req('POST',`/api/shopping/${chatId}/${currentList.list_id}/custom`,{name:val,added_by:userName,price});
+  currentList=upd;const idx=lists.findIndex(l=>l.list_id===currentList.list_id);if(idx>=0)lists[idx]=upd;
+  inp.value='';$('g-price').value='';renderCats();showLoad(false);tg?.HapticFeedback?.notificationOccurred('success');
 }
-$('g-custom').addEventListener('keydown', e => { if(e.key==='Enter') addCustom(); });
-
-// ── TASKS ──
-async function loadTasks() {
-  try { tasks = await api('GET', `/api/tasks/${chatId}`); } catch(e) { tasks = []; }
+$('g-custom').addEventListener('keydown',e=>{if(e.key==='Enter') addCustom()});
+$('nl-name').addEventListener('keydown',e=>{if(e.key==='Enter') createList()});
+async function loadTasks(){try{tasks=await req('GET',`/api/tasks/${chatId}`)}catch(e){tasks=[]}}
+function renderTasks(){
+  const body=$('tasks-body'),today=new Date().toISOString().split('T')[0];
+  body.innerHTML=`<div class="calendar" id="cal"></div><div id="tlist"></div>`;
+  renderCal();
+  const tl=$('tlist');
+  if(!tasks.length){tl.innerHTML=`<div class="empty-state"><div class="big">📅</div><p>Нет задач.<br>Нажми <b>+</b> чтобы добавить!</p></div>`;return}
+  const todayT=tasks.filter(t=>t.date===today);
+  const upcom=tasks.filter(t=>t.date>today).sort((a,b)=>a.date.localeCompare(b.date));
+  const past=tasks.filter(t=>t.date<today).sort((a,b)=>b.date.localeCompare(a.date));
+  let html='';
+  if(todayT.length){html+=`<div class="task-sec">Сегодня</div>`;html+=todayT.map(t=>tCard(t,true)).join('')}
+  if(upcom.length){html+=`<div class="task-sec">Предстоящие</div>`;html+=upcom.map(t=>tCard(t,false)).join('')}
+  if(past.length){html+=`<div class="task-sec">Прошедшие</div>`;html+=past.map(t=>tCard(t,false)).join('')}
+  tl.innerHTML=html;
 }
-
-function renderTasks() {
-  const body = $('tasks-body');
-  const today = new Date().toISOString().split('T')[0];
-  const taskDates = new Set(tasks.map(t=>t.date));
-
-  // Calendar
-  body.innerHTML = `<div class="calendar" id="cal"></div><div id="task-list"></div>`;
-  renderCalendar();
-
-  // Task list
-  const taskList = $('task-list');
-  if (!tasks.length) {
-    taskList.innerHTML = `<div class="empty-state"><div class="big">📅</div><p>Нет задач.<br>Нажми <b>+</b> чтобы добавить!</p></div>`;
-    return;
-  }
-
-  const todayTasks = tasks.filter(t=>t.date===today);
-  const upcoming = tasks.filter(t=>t.date>today).sort((a,b)=>a.date.localeCompare(b.date));
-  const past = tasks.filter(t=>t.date<today).sort((a,b)=>b.date.localeCompare(a.date));
-
-  let html = '';
-  if (todayTasks.length) {
-    html += `<div class="task-section-title">Сегодня</div>`;
-    html += todayTasks.map(t=>taskCard(t, true)).join('');
-  }
-  if (upcoming.length) {
-    html += `<div class="task-section-title">Предстоящие</div>`;
-    html += upcoming.map(t=>taskCard(t, false)).join('');
-  }
-  if (past.length) {
-    html += `<div class="task-section-title">Прошедшие</div>`;
-    html += past.map(t=>taskCard(t, false)).join('');
-  }
-  taskList.innerHTML = html;
-}
-
-function taskCard(t, isToday) {
-  const dateObj = new Date(t.date + 'T00:00:00');
-  const dateStr = dateObj.toLocaleDateString('ru-RU', { day:'numeric', month:'long' });
-  const timeStr = t.time ? ` · ${t.time}` : '';
-  const doneCls = t.done ? 'done' : '';
-  const todayCls = isToday ? 'today-task' : '';
-  const badgeCls = isToday ? 'today-badge' : '';
-  return `<div class="task-card ${doneCls} ${todayCls}" onclick="toggleTask('${t.task_id}')">
-    <button class="task-del" onclick="event.stopPropagation();deleteTask('${t.task_id}')">✕</button>
+function tCard(t,isT){
+  const d=new Date(t.date+'T00:00:00');
+  const ds=d.toLocaleDateString('ru-RU',{day:'numeric',month:'long'});
+  const ts=t.time?` · ${t.time}`:'';
+  return `<div class="task-card ${t.done?'done':''} ${isT?'today-task':''}" onclick="toggleTask('${t.task_id}')">
+    <button class="task-del" onclick="event.stopPropagation();delTask('${t.task_id}')">✕</button>
     <div class="task-top">
       <div class="task-check">${t.done?'✓':''}</div>
-      <div class="task-body">
+      <div class="task-body2">
         <div class="task-title">${t.title}</div>
-        ${t.description ? `<div class="task-desc">${t.description}</div>` : ''}
+        ${t.description?`<div class="task-desc">${t.description}</div>`:''}
         <div class="task-meta">
-          <div class="task-date-badge ${badgeCls}">📅 ${dateStr}${timeStr}</div>
-          ${t.creator ? `<div class="task-creator">от ${t.creator}</div>` : ''}
+          <div class="task-date ${isT?'today':''}">📅 ${ds}${ts}</div>
+          ${t.creator?`<div class="task-creator">от ${t.creator}</div>`:''}
         </div>
       </div>
     </div>
   </div>`;
 }
-
-function renderCalendar() {
-  const cal = $('cal');
-  if (!cal) return;
-  const today = new Date();
-  const todayStr = today.toISOString().split('T')[0];
-  const taskDates = new Set(tasks.map(t=>t.date));
-  const monthNames = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
-  const dayNames = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
-
-  const firstDay = new Date(calYear, calMonth, 1);
-  const lastDay = new Date(calYear, calMonth+1, 0);
-  let startDow = firstDay.getDay() - 1; if (startDow < 0) startDow = 6;
-
-  let html = `<div class="cal-header">
-    <button class="cal-nav" onclick="calPrev()">‹</button>
-    <div class="cal-title">${monthNames[calMonth]} ${calYear}</div>
-    <button class="cal-nav" onclick="calNext()">›</button>
-  </div><div class="cal-grid">`;
-  dayNames.forEach(d => html += `<div class="cal-day-name">${d}</div>`);
-  for (let i=0;i<startDow;i++) html += `<div class="cal-day empty"></div>`;
-  for (let d=1;d<=lastDay.getDate();d++) {
-    const dateStr = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const isToday = dateStr === todayStr;
-    const isSel = dateStr === selectedDate;
-    const hasTask = taskDates.has(dateStr);
-    html += `<div class="cal-day ${isToday?'today':''} ${isSel?'selected':''} ${hasTask?'has-task':''}" onclick="selectDate('${dateStr}')">${d}</div>`;
+function renderCal(){
+  const cal=$('cal');if(!cal) return;
+  const today=new Date().toISOString().split('T')[0];
+  const td=new Set(tasks.map(t=>t.date));
+  const mn=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+  const dn=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+  const first=new Date(calY,calM,1),last=new Date(calY,calM+1,0);
+  let sdow=first.getDay()-1;if(sdow<0)sdow=6;
+  let html=`<div class="cal-header"><button class="cal-nav" onclick="calPrev()">‹</button><div class="cal-title">${mn[calM]} ${calY}</div><button class="cal-nav" onclick="calNext()">›</button></div><div class="cal-grid">`;
+  dn.forEach(d=>html+=`<div class="cal-day-name">${d}</div>`);
+  for(let i=0;i<sdow;i++) html+=`<div class="cal-day empty"></div>`;
+  for(let d=1;d<=last.getDate();d++){
+    const ds=`${calY}-${String(calM+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    html+=`<div class="cal-day ${ds===today?'today':''} ${ds===selDate?'selected':''} ${td.has(ds)?'has-task':''}" onclick="selD('${ds}')">${d}</div>`;
   }
-  html += `</div>`;
-  cal.innerHTML = html;
+  html+=`</div>`;cal.innerHTML=html;
 }
-
-function calPrev() { calMonth--; if(calMonth<0){calMonth=11;calYear--;} renderCalendar(); }
-function calNext() { calMonth++; if(calMonth>11){calMonth=0;calYear++;} renderCalendar(); }
-function selectDate(date) {
-  selectedDate = selectedDate === date ? null : date;
-  renderCalendar();
-  // filter tasks by date
-  const taskList = $('task-list');
-  if (!taskList) return;
-  if (!selectedDate) { renderTasks(); return; }
-  const filtered = tasks.filter(t=>t.date===selectedDate);
-  if (!filtered.length) {
-    taskList.innerHTML = `<div class="empty-state"><div class="big">📅</div><p>Нет задач на этот день.</p></div>`;
-  } else {
-    taskList.innerHTML = filtered.map(t=>taskCard(t, t.date===new Date().toISOString().split('T')[0])).join('');
-  }
+function calPrev(){calM--;if(calM<0){calM=11;calY--}renderCal()}
+function calNext(){calM++;if(calM>11){calM=0;calY++}renderCal()}
+function selD(d){
+  selDate=selDate===d?null:d;renderCal();
+  const tl=$('tlist');if(!tl) return;
+  if(!selDate){renderTasks();return}
+  const f=tasks.filter(t=>t.date===selDate);
+  const today=new Date().toISOString().split('T')[0];
+  tl.innerHTML=f.length?f.map(t=>tCard(t,t.date===today)).join(''):`<div class="empty-state"><div class="big">📅</div><p>Нет задач на этот день.</p></div>`;
 }
-
-async function createTask() {
-  const title = $('nt-title').value.trim();
-  const date = $('nt-date').value;
-  if (!title || !date) { alert('Введи название и дату'); return; }
-  closeBS('bs-newtask');
-  showLoad(true);
-  try {
-    const task_id = Date.now().toString(36);
-    const task = await api('POST', `/api/tasks/${chatId}`, {
-      task_id, title, description: $('nt-desc').value.trim(),
-      date, time: $('nt-time').value, creator: userName
-    });
-    tasks.push(task);
-    renderTasks();
-  } catch(e) { alert('Ошибка: ' + e.message); }
+async function createTask(){
+  const title=$('nt-title').value.trim(),date=$('nt-date').value;
+  if(!title||!date){alert('Введи название и дату');return}
+  closeBS('bs-newtask');showLoad(true);
+  try{
+    const tid=Date.now().toString(36);
+    const task=await req('POST',`/api/tasks/${chatId}`,{task_id:tid,title,description:$('nt-desc').value.trim(),date,time:$('nt-time').value,creator:userName});
+    tasks.push(task);renderTasks();
+  }catch(e){alert('Ошибка: '+e.message)}
   showLoad(false);
 }
-
-async function toggleTask(taskId) {
-  const task = await api('POST', `/api/tasks/${chatId}/${taskId}/toggle`, {});
-  const idx = tasks.findIndex(t=>t.task_id===taskId);
-  if (idx>=0) tasks[idx] = task;
-  renderTasks();
-  tg?.HapticFeedback?.impactOccurred('light');
+async function toggleTask(tid){
+  const t=await req('POST',`/api/tasks/${chatId}/${tid}/toggle`,{});
+  const i=tasks.findIndex(x=>x.task_id===tid);if(i>=0)tasks[i]=t;
+  renderTasks();tg?.HapticFeedback?.impactOccurred('light');
 }
-
-async function deleteTask(taskId) {
-  if (!confirm('Удалить задачу?')) return;
-  await api('DELETE', `/api/tasks/${chatId}/${taskId}`);
-  tasks = tasks.filter(t=>t.task_id!==taskId);
-  renderTasks();
+async function delTask(tid){
+  if(!confirm('Удалить задачу?')) return;
+  await req('DELETE',`/api/tasks/${chatId}/${tid}`);
+  tasks=tasks.filter(t=>t.task_id!==tid);renderTasks();
 }
-
-// ── CATEGORIES DATA ──
-const CATS = [
-  {id:'dairy',  e:'🥛', n:'Молочная продукция', items:['Молоко','Кефир','Ряженка','Йогурт','Сметана','Творог','Сыр','Масло сливочное','Сливки','Глазированные сырки','Сгущёнка','Простокваша','Варенец']},
-  {id:'bread',  e:'🍞', n:'Хлеб и выпечка',     items:['Хлеб чёрный','Хлеб белый','Батон','Багет','Лаваш','Булочки','Круассаны','Ватрушки','Пончики','Пряники','Печенье','Сухари','Сушки','Баранки','Хлебцы']},
-  {id:'meat',   e:'🥩', n:'Мясо и колбасы',     items:['Говядина','Свинина','Баранина','Курица','Индейка','Утка','Фарш','Пельмени','Котлеты','Манты','Хинкали','Шашлык','Сосиски','Колбаса варёная','Колбаса копчёная','Ветчина','Буженина','Сардельки','Паштет','Тушёнка']},
-  {id:'fish',   e:'🐟', n:'Рыба и морепродукты',items:['Рыба мороженая','Рыба охлаждённая','Сельдь','Скумбрия','Рыба копчёная','Семга','Форель','Икра красная','Икра чёрная','Шпроты','Сайра','Тунец','Креветки','Кальмары','Мидии','Крабовые палочки']},
-  {id:'veggies',e:'🥦', n:'Овощи',              items:['Картофель','Морковь','Лук репчатый','Лук зелёный','Помидоры','Огурцы','Перец болгарский','Чеснок','Свёкла','Капуста','Кабачки','Баклажаны','Тыква','Грибы шампиньоны','Вешенки']},
-  {id:'fruits', e:'🍎', n:'Фрукты и зелень',    items:['Яблоки','Бананы','Апельсины','Лимоны','Мандарины','Груши','Виноград','Клубника','Укроп','Петрушка','Кинза','Базилик','Салат','Шпинат']},
-  {id:'grains', e:'🌾', n:'Бакалея и крупы',    items:['Гречка','Рис','Манка','Овсянка','Пшено','Перловка','Горох','Фасоль','Чечевица','Макароны','Спагетти','Вермишель','Мука','Сахар','Соль','Сода','Крахмал','Дрожжи']},
-  {id:'oil',    e:'🫙', n:'Масла и соусы',       items:['Масло подсолнечное','Масло оливковое','Масло кунжутное','Кетчуп','Майонез','Горчица','Соевый соус','Уксус','Томатная паста']},
-  {id:'spices', e:'🌶', n:'Специи и приправы',  items:['Перец чёрный','Перец красный','Лавровый лист','Куркума','Корица','Ванилин','Приправа универсальная','Паприка','Карри','Имбирь','Мускатный орех']},
-  {id:'sweets', e:'🍫', n:'Сладости',           items:['Шоколад','Конфеты','Шоколадные батончики','Зефир','Пастила','Мармелад','Халва','Вафли','Торт','Пирожные','Кексы','Мёд','Варенье','Джем']},
-  {id:'snacks', e:'🍿', n:'Снеки и орехи',      items:['Чипсы','Сухарики','Орехи','Сухофрукты','Семечки','Попкорн','Арахис','Миндаль','Кешью','Изюм']},
-  {id:'tea',    e:'☕', n:'Чай и кофе',         items:['Чай чёрный','Чай зелёный','Чай травяной','Кофе в зёрнах','Кофе молотый','Кофе растворимый','Какао','Цикорий']},
-  {id:'drinks', e:'🥤', n:'Напитки',            items:['Вода минеральная','Вода питьевая','Сок','Нектар','Морс','Компот','Лимонад','Газировка','Квас','Энергетик']},
-  {id:'alcohol',e:'🍷', n:'Алкоголь',           items:['Пиво','Вино красное','Вино белое','Шампанское','Водка','Коньяк','Виски','Ром','Ликёр']},
-  {id:'frozen', e:'🧊', n:'Заморозка',          items:['Овощные смеси','Ягоды замороженные','Грибы замороженные','Пицца','Блинчики','Вареники','Чебуреки','Мороженое','Рыбные палочки']},
-  {id:'dairy2', e:'🥚', n:'Яйца и масло',       items:['Яйца куриные','Яйца перепелиные','Масло сливочное 82%','Маргарин','Спред']},
-  {id:'chem',   e:'🧴', n:'Бытовая химия',      items:['Стиральный порошок','Капсулы для стирки','Кондиционер для белья','Средство для посуды','Чистящий порошок','Средство для пола','Освежитель воздуха','Туалетный утёнок']},
-  {id:'hygiene',e:'🪥', n:'Гигиена',            items:['Зубная паста','Зубная щётка','Шампунь','Гель для душа','Мыло','Дезодорант','Туалетная бумага','Салфетки','Ватные диски','Влажные салфетки','Бритва','Пена для бритья']},
-  {id:'home',   e:'🏠', n:'Для дома',           items:['Пакеты для мусора','Фольга','Плёнка пищевая','Губки','Перчатки','Спички','Батарейки','Лампочки','Скотч','Бумажные полотенца']},
-  {id:'pets',   e:'🐾', n:'Зоотовары',          items:['Корм для кошек','Корм для собак','Лакомства для кошек','Лакомства для собак','Наполнитель для туалета','Витамины для животных']},
+const CATS=[
+  {id:'dairy',e:'🥛',n:'Молочный отдел',items:[{n:'молоко 1 л',p:2.9},{n:'кефир 1 л',p:3.2},{n:'ряженка 1 л',p:3.4},{n:'йогурт питьевой',p:2.6},{n:'йогурт густой 150г',p:1.6},{n:'творог 5% 200г',p:3.4},{n:'творожная масса 180г',p:2.8},{n:'сметана 20% 400г',p:5.2},{n:'сливки 10% 200мл',p:3.2},{n:'масло сливочное 180г',p:7.4},{n:'маргарин 180г',p:3.2},{n:'сыр твёрдый 200г',p:8.9},{n:'сыр моцарелла 200г',p:7.9},{n:'сыр плавленый 170г',p:3.3},{n:'сыр творожный 150г',p:4.9},{n:'сгущёнка 380г',p:4.9},{n:'молочный коктейль 0.5л',p:3.3},{n:'мороженое пломбир',p:1.9}]},
+  {id:'eggs',e:'🥚',n:'Яйца',items:[{n:'яйца C1 10шт',p:5.2},{n:'яйца C0 10шт',p:5.9},{n:'яйца перепелиные 20шт',p:4.9}]},
+  {id:'bread',e:'🍞',n:'Хлебобулочный отдел',items:[{n:'хлеб пшеничный',p:1.9},{n:'хлеб ржаной',p:2.3},{n:'батон',p:2.1},{n:'багет',p:2.7},{n:'лаваш',p:2.6},{n:'булочки для бургеров 4шт',p:3.6},{n:'сухари панировочные',p:2.2},{n:'сушки/баранки 300г',p:3.2},{n:'крекеры',p:3.2},{n:'хлебцы',p:3.9},{n:'слоёное тесто 500г',p:4.9},{n:'дрожжи сухие',p:1.6}]},
+  {id:'meat',e:'🥩',n:'Мясо и птица',items:[{n:'курица целая 1кг',p:6.9},{n:'голень куриная 1кг',p:8.9},{n:'бедро куриное 1кг',p:9.4},{n:'филе куриное 1кг',p:17.9},{n:'фарш куриный 1кг',p:13.9},{n:'индейка филе 1кг',p:24.9},{n:'свинина лопатка 1кг',p:21.9},{n:'свинина шея 1кг',p:27.9},{n:'говядина 1кг',p:36.9},{n:'фарш смешанный 1кг',p:18.9},{n:'печень куриная 1кг',p:7.9},{n:'печень говяжья 1кг',p:14.9},{n:'сердца куриные 1кг',p:6.9}]},
+  {id:'deli',e:'🌭',n:'Колбасы и деликатесы',items:[{n:'сосиски 1кг',p:16.9},{n:'сардельки 1кг',p:17.9},{n:'колбаса варёная 1кг',p:18.9},{n:'колбаса п/копчёная 1кг',p:26.9},{n:'ветчина 200г',p:6.9},{n:'бекон 200г',p:7.9},{n:'паштет 150г',p:2.9}]},
+  {id:'fish',e:'🐟',n:'Рыба и морепродукты',items:[{n:'хек/минтай 1кг',p:12.9},{n:'скумбрия 1кг',p:14.9},{n:'сельдь 1кг',p:13.9},{n:'филе трески 1кг',p:28.9},{n:'лосось/форель 1кг',p:79.0},{n:'крабовые палочки 200г',p:4.9},{n:'креветки 400г',p:19.9},{n:'кальмар 500г',p:14.9},{n:'тунец стейк 500г',p:24.9},{n:'икра мойвы 180г',p:4.9}]},
+  {id:'veggies',e:'🥦',n:'Овощи',items:[{n:'картофель 1кг',p:2.4},{n:'лук 1кг',p:2.3},{n:'морковь 1кг',p:2.2},{n:'капуста 1кг',p:2.4},{n:'свёкла 1кг',p:2.3},{n:'огурцы 1кг',p:8.9},{n:'помидоры 1кг',p:10.9},{n:'перец сладкий 1кг',p:14.9},{n:'кабачок 1кг',p:6.9},{n:'баклажан 1кг',p:10.9},{n:'чеснок 100г',p:2.2},{n:'шампиньоны 500г',p:7.9},{n:'брокколи 400г',p:7.9},{n:'цветная капуста 1кг',p:9.9},{n:'кукуруза',p:4.9},{n:'тыква 1кг',p:4.9}]},
+  {id:'greens',e:'🌿',n:'Зелень',items:[{n:'укроп',p:2.2},{n:'петрушка',p:2.2},{n:'зелёный лук',p:2.3},{n:'салат листовой',p:4.9},{n:'руккола',p:5.9},{n:'шпинат',p:5.9}]},
+  {id:'fruits',e:'🍎',n:'Фрукты и ягоды',items:[{n:'яблоки 1кг',p:4.9},{n:'бананы 1кг',p:6.9},{n:'апельсины 1кг',p:8.9},{n:'мандарины 1кг',p:9.9},{n:'лимоны 1кг',p:10.9},{n:'груши 1кг',p:9.9},{n:'виноград 1кг',p:16.9},{n:'киви 1кг',p:12.9},{n:'ананас 1шт',p:12.9},{n:'авокадо 1шт',p:6.9},{n:'клубника 1кг',p:29.0},{n:'черника 150г',p:8.9}]},
+  {id:'grains',e:'🌾',n:'Бакалея и крупы',items:[{n:'рис 1кг',p:6.9},{n:'гречка 900г',p:5.9},{n:'овсяные хлопья 500г',p:2.9},{n:'пшено 1кг',p:4.9},{n:'перловка 1кг',p:3.9},{n:'булгур 500г',p:5.9},{n:'кус-кус 500г',p:6.9},{n:'чечевица 500г',p:5.9},{n:'фасоль 900г',p:8.9},{n:'горох 800г',p:4.9},{n:'макароны 500г',p:3.9},{n:'спагетти 500г',p:4.9},{n:'мука пшеничная 2кг',p:4.9},{n:'мука цельнозерновая 1кг',p:4.9},{n:'сахар 1кг',p:3.9},{n:'соль 1кг',p:1.2},{n:'сода 500г',p:2.2},{n:'крахмал',p:2.4}]},
+  {id:'oils',e:'🫙',n:'Масла и соусы',items:[{n:'масло подсолнечное 1л',p:7.9},{n:'масло оливковое 0.5л',p:24.9},{n:'уксус 9% 1л',p:3.2},{n:'соевый соус 250мл',p:4.9},{n:'кетчуп 500г',p:6.9},{n:'майонез 400г',p:5.9},{n:'горчица',p:2.4},{n:'томатная паста 140г',p:2.2},{n:'аджика',p:4.9},{n:'мёд 500г',p:14.9},{n:'варенье 450г',p:7.9},{n:'джем 300г',p:5.9}]},
+  {id:'spices',e:'🌶',n:'Специи и приправы',items:[{n:'перец чёрный',p:2.2},{n:'паприка',p:3.9},{n:'карри',p:4.9},{n:'лавровый лист',p:1.9},{n:'корица',p:3.9},{n:'куркума',p:4.9},{n:'ванилин',p:2.2},{n:'приправа универсальная',p:4.9}]},
+  {id:'canned',e:'🥫',n:'Консервы',items:[{n:'горошек конс.',p:2.9},{n:'кукуруза конс.',p:3.3},{n:'фасоль конс.',p:2.9},{n:'огурцы марин. 720мл',p:6.9},{n:'помидоры 720мл',p:6.9},{n:'шпроты',p:6.9},{n:'сардины',p:4.9},{n:'тунец консерв.',p:7.9},{n:'тушёнка 338г',p:9.9},{n:'оливки/маслины',p:6.9}]},
+  {id:'frozen',e:'🧊',n:'Заморозка',items:[{n:'пельмени 1кг',p:13.9},{n:'вареники 700г',p:9.9},{n:'котлеты/наггетсы 400г',p:9.9},{n:'овощная смесь 400г',p:4.9},{n:'ягоды замороженные 400г',p:8.9},{n:'картофель фри 750г',p:7.9},{n:'пицца замороженная',p:9.9}]},
+  {id:'snacks',e:'🍿',n:'Снеки и орехи',items:[{n:'чипсы 140г',p:6.9},{n:'сухарики',p:2.2},{n:'орехи 200г',p:7.9},{n:'семечки 200г',p:3.9},{n:'фисташки 200г',p:14.9},{n:'попкорн',p:2.9}]},
+  {id:'sweets',e:'🍫',n:'Сладости',items:[{n:'шоколад плитка',p:4.9},{n:'конфеты 1кг',p:24.9},{n:'печенье 400г',p:6.9},{n:'вафли',p:4.9},{n:'пряники',p:5.9},{n:'зефир',p:5.9},{n:'мармелад',p:5.9},{n:'торт',p:24.9},{n:'сгущёнка варёная',p:5.9}]},
+  {id:'hotdrinks',e:'☕',n:'Чай и кофе',items:[{n:'чай чёрный 25пак.',p:5.9},{n:'чай зелёный 25пак.',p:6.9},{n:'чай листовой 100г',p:9.9},{n:'кофе растворимый 100г',p:14.9},{n:'кофе молотый 250г',p:16.9},{n:'какао 200г',p:6.9}]},
+  {id:'drinks',e:'🥤',n:'Напитки',items:[{n:'вода питьевая 1.5л',p:1.9},{n:'вода газ. 1.5л',p:2.2},{n:'сок 1л',p:4.9},{n:'нектар 1л',p:3.9},{n:'морс 1л',p:4.9},{n:'газировка 2л',p:3.9},{n:'квас 1.5л',p:4.9},{n:'энергетик 0.5л',p:4.9}]},
+  {id:'alcohol',e:'🍷',n:'Алкоголь',items:[{n:'пиво 0.5л',p:3.2},{n:'вино 0.75л',p:19.9},{n:'игристое 0.75л',p:21.9},{n:'водка 0.5л',p:22.9}]},
+  {id:'chem',e:'🧴',n:'Бытовая химия',items:[{n:'стиральный порошок 2кг',p:19.9},{n:'гель для стирки 1.5л',p:21.9},{n:'кондиционер для белья 1л',p:9.9},{n:'капсулы для стирки 20шт',p:26.9},{n:'средство для посуды 0.5л',p:5.2},{n:'губки кухонные 5шт',p:2.9},{n:'пакеты для мусора 35л',p:4.9},{n:'пакеты для мусора 60л',p:6.9},{n:'плёнка пищевая',p:4.2},{n:'фольга',p:5.9},{n:'бумага для выпечки',p:4.9},{n:'бумажные полотенца 2рул.',p:6.9},{n:'туалетная бумага 8рул.',p:10.9},{n:'салфетки бумажные',p:2.2},{n:'освежитель воздуха',p:6.9},{n:'средство для унитаза',p:7.9},{n:'универсальный спрей',p:6.9}]},
+  {id:'hygiene',e:'🪥',n:'Личная гигиена',items:[{n:'мыло туалетное',p:1.9},{n:'жидкое мыло',p:4.9},{n:'гель для душа',p:8.9},{n:'шампунь',p:9.9},{n:'бальзам для волос',p:10.9},{n:'зубная паста',p:7.9},{n:'зубная щётка',p:4.9},{n:'дезодорант',p:9.9},{n:'ватные диски',p:3.2},{n:'ватные палочки',p:2.2},{n:'влажные салфетки',p:3.9},{n:'прокладки',p:8.9},{n:'крем для рук',p:6.9}]},
+  {id:'pets',e:'🐾',n:'Зоотовары',items:[{n:'корм сухой кошка 1.5кг',p:24.9},{n:'корм влажный кошка',p:1.9},{n:'наполнитель лоток 5л',p:9.9},{n:'корм сухой собака 2кг',p:29.9},{n:'лакомства',p:6.9}]},
+  {id:'baby',e:'👶',n:'Детский раздел',items:[{n:'подгузники 44-60шт',p:49.9},{n:'подгузники-трусики 40шт',p:54.9},{n:'влажные салфетки детские',p:7.9},{n:'пелёнки одноразовые 10шт',p:14.9},{n:'детский крем',p:9.9},{n:'детское мыло',p:6.9},{n:'шампунь детский',p:8.9},{n:'смесь молочная 400г',p:29.9},{n:'каша детская',p:6.9},{n:'пюре фруктовое 90г',p:2.4},{n:'пюре мясное 80г',p:4.9},{n:'сок детский 0.2л',p:1.9}]},
 ];
-const CAT_MAP = Object.fromEntries(CATS.map(c=>[c.id,c]));
-
-// keyboard enter handlers
-$('nl-name').addEventListener('keydown', e => { if(e.key==='Enter') createList(); });
-$('nt-title').addEventListener('keydown', e => { if(e.key==='Enter') $('nt-desc').focus(); });
-
-// ── INIT ──
-(async () => {
-  showLoad(true);
-  await Promise.all([loadLists(), loadTasks()]);
-  renderHome();
-  goTo('s-home');
-  showLoad(false);
-})();
+const CAT_MAP=Object.fromEntries(CATS.map(c=>[c.id,c]));
+(async()=>{showLoad(true);await Promise.all([loadLists(),loadTasks()]);renderHome();goTo('s-home');showLoad(false);})();
 </script>
 </body>
 </html>
