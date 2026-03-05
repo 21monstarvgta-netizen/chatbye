@@ -315,10 +315,10 @@ const tg = window.Telegram?.WebApp;
 if (tg) { tg.ready(); tg.expand(); }
 
 const API = 'https://chatverse-r3y1.onrender.com';
+const urlParams = new URLSearchParams(window.location.search);
 const userName = urlParams.get('user') ? decodeURIComponent(urlParams.get('user')) : (tg?.initDataUnsafe?.user?.first_name || 'Пользователь');
 
 // chat_id: из URL параметра или из Telegram
-const urlParams = new URLSearchParams(window.location.search);
 const chatId = urlParams.get('chat_id') ||
                tg?.initDataUnsafe?.chat?.id ||
                tg?.initDataUnsafe?.user?.id ||
