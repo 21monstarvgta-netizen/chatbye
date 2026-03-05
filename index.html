@@ -242,7 +242,10 @@ textarea.inp{min-height:70px;resize:none}
 const tg=window.Telegram?.WebApp;
 if(tg){tg.ready();tg.expand();}
 const urlParams=new URLSearchParams(window.location.search);
-const userName=urlParams.get('user')?decodeURIComponent(urlParams.get('user')):(tg?.initDataUnsafe?.user?.first_name||'Пользователь');
+// Имя берём из Telegram напрямую — у каждого участника своё
+const tgUser = tg?.initDataUnsafe?.user;
+const tgName = tgUser ? (tgUser.first_name + (tgUser.last_name ? ' ' + tgUser.last_name : '')) : null;
+const userName = tgName || urlParams.get('user') ? (tgName || decodeURIComponent(urlParams.get('user'))) : 'Пользователь';
 const chatId=urlParams.get('chat_id')||tg?.initDataUnsafe?.chat?.id||tg?.initDataUnsafe?.user?.id||'test';
 const API='https://chatverse-r3y1.onrender.com';
 let lists=[],tasks=[],currentList=null,currentCatId=null,editKey=null;
